@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Redesign - Project Details</title>
+    <style>
+        /* Oracle Redwood Design System Styles */
+        :root {
+            --oracle-red: #C74634;
+            --success-green: #3A8026;
+            --warning-yellow: #F5C344;
+            --error-red: #C74634;
+            --info-blue: #2B5A9E;
+            --bg-light: #F8F8F8;
+            --bg-card: #FFFFFF;
+            --border-gray: #E0E0E0;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .app-header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-gray);
+            padding: var(--spacing-md) var(--spacing-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: var(--spacing-sm);
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .back-button:hover {
+            background-color: var(--bg-light);
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb a {
+            color: var(--oracle-red);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .icon-button {
+            background: none;
+            border: 1px solid var(--border-gray);
+            cursor: pointer;
+            padding: var(--spacing-sm);
+            border-radius: 4px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .icon-button:hover {
+            background-color: var(--bg-light);
+            border-color: var(--text-secondary);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-xl);
+        }
+
+        /* Project Header */
+        .project-header {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .project-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .project-title-section {
+            flex: 1;
+        }
+
+        .project-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .project-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .project-status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background-color: #E6F0FA;
+            color: var(--info-blue);
+        }
+
+        .health-dashboard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .health-circle-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 32px;
+            color: white;
+            background-color: var(--error-red);
+            box-shadow: 0 4px 12px rgba(199, 70, 52, 0.3);
+        }
+
+        .health-subtitle {
+            font-size: 11px;
+            color: white;
+            margin-top: -4px;
+        }
+
+        .health-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .health-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .team-section {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .avatar-group {
+            display: flex;
+            margin-left: -8px;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            color: white;
+            border: 2px solid white;
+            margin-left: -8px;
+        }
+
+        .avatar:nth-child(1) { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .avatar:nth-child(2) { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .avatar:nth-child(3) { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .avatar:nth-child(4) { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .avatar:nth-child(5) { background: linear-gradient(135deg, #fa709a, #fee140); }
+        .avatar:nth-child(6) { background: linear-gradient(135deg, #30cfd0, #330867); }
+
+        .team-count {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Alerts Panel */
+        .alerts-panel {
+            background-color: #FFEAEA;
+            border-left: 4px solid var(--error-red);
+            border-radius: 4px;
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .alerts-panel.collapsed {
+            padding: var(--spacing-sm) var(--spacing-md);
+        }
+
+        .alerts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .alerts-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--error-red);
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s;
+        }
+
+        .toggle-icon.expanded {
+            transform: rotate(180deg);
+        }
+
+        .alerts-list {
+            margin-top: var(--spacing-md);
+        }
+
+        .alert-item {
+            background-color: white;
+            padding: var(--spacing-md);
+            border-radius: 4px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .alert-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .alert-item-title {
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .alert-item-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .metric-box {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: var(--spacing-lg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .metric-icon.tasks {
+            background-color: #E6F0FA;
+            color: var(--info-blue);
+        }
+
+        .metric-icon.budget {
+            background-color: #FFF9E6;
+            color: #C8900D;
+        }
+
+        .metric-icon.timeline {
+            background-color: #F0E6FA;
+            color: #7B3FA2;
+        }
+
+        .metric-icon.team {
+            background-color: #E6FAF0;
+            color: var(--success-green);
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .metric-detail {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .metric-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 500;
+            font-size: 12px;
+            margin-top: var(--spacing-xs);
+        }
+
+        .metric-status.critical {
+            color: var(--error-red);
+        }
+
+        .metric-status.warning {
+            color: #C8900D;
+        }
+
+        .metric-status.success {
+            color: var(--success-green);
+        }
+
+        /* Tabs */
+        .tabs {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .tab-nav {
+            display: flex;
+            border-bottom: 1px solid var(--border-gray);
+            background-color: var(--bg-light);
+        }
+
+        .tab-button {
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-button:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-button.active {
+            color: var(--oracle-red);
+            border-bottom-color: var(--oracle-red);
+            background-color: var(--bg-card);
+        }
+
+        .tab-content {
+            padding: var(--spacing-xl);
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background-color: var(--bg-light);
+        }
+
+        .data-table th {
+            padding: var(--spacing-md);
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-gray);
+        }
+
+        .data-table td {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--border-gray);
+            font-size: 14px;
+        }
+
+        .data-table tr:hover {
+            background-color: var(--bg-light);
+        }
+
+        .task-title {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.todo {
+            background-color: #F0F0F0;
+            color: #666;
+        }
+
+        .status-badge.in-progress {
+            background-color: #E6F0FA;
+            color: var(--info-blue);
+        }
+
+        .status-badge.done {
+            background-color: #E6F7ED;
+            color: var(--success-green);
+        }
+
+        .status-badge.blocked {
+            background-color: #FFEAEA;
+            color: var(--error-red);
+        }
+
+        .priority-badge {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .priority-badge.high {
+            background-color: var(--error-red);
+        }
+
+        .priority-badge.medium {
+            background-color: var(--warning-yellow);
+        }
+
+        .priority-badge.low {
+            background-color: var(--border-gray);
+        }
+
+        .health-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .health-indicator.on-track {
+            background-color: #E6F7ED;
+            color: var(--success-green);
+        }
+
+        .health-indicator.at-risk {
+            background-color: #FFF9E6;
+            color: #C8900D;
+        }
+
+        .health-indicator.critical {
+            background-color: #FFEAEA;
+            color: var(--error-red);
+        }
+
+        .progress-cell {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .progress-bar-mini {
+            flex: 1;
+            height: 6px;
+            background-color: var(--bg-light);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--info-blue), var(--oracle-red));
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            font-size: 13px;
+            font-weight: 600;
+            min-width: 40px;
+        }
+
+        /* Insights Panel */
+        .insights-panel {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .insights-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .chart-container {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .chart-label {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            color: var(--text-secondary);
+        }
+
+        .chart-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .insight-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+        }
+
+        .insight-card {
+            padding: var(--spacing-md);
+            background-color: var(--bg-light);
+            border-radius: 6px;
+        }
+
+        .insight-card-title {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .insight-card-value {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .btn-primary {
+            background-color: var(--oracle-red);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #A83A2A;
+        }
+
+        /* Icons */
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .icon-sm {
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-left">
+            <button class="back-button" onclick="window.location.href='dashboard.html'">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <div class="breadcrumb">
+                <a href="dashboard.html">Dashboard</a> / <span>Website Redesign</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="icon-button">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="1"></circle>
+                    <circle cx="12" cy="5" r="1"></circle>
+                    <circle cx="12" cy="19" r="1"></circle>
+                </svg>
+                More
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Project Header -->
+        <div class="project-header">
+            <div class="project-title-row">
+                <div class="project-title-section">
+                    <h1 class="project-title">Website Redesign</h1>
+                    <div class="project-meta">
+                        <span class="project-status-badge">Active</span>
+                        <span>Oct 1, 2025 - Dec 15, 2025</span>
+                        <span>•</span>
+                        <span>PM: Sarah Johnson</span>
+                    </div>
+                </div>
+                <div class="health-dashboard">
+                    <div class="health-circle-large">
+                        42
+                        <div class="health-subtitle">Critical</div>
+                    </div>
+                    <div class="health-label">Health Score</div>
+                    <div class="health-description">Budget & Timeline At Risk</div>
+                </div>
+            </div>
+
+            <!-- Alerts Panel -->
+            <div class="alerts-panel" id="alertsPanel">
+                <div class="alerts-header" onclick="toggleAlerts()">
+                    <div class="alerts-title">🚨 3 Critical Alerts</div>
+                    <svg class="icon toggle-icon expanded" id="toggleIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </div>
+                <div class="alerts-list" id="alertsList">
+                    <div class="alert-item">
+                        <div class="alert-item-title">Budget Overrun Predicted</div>
+                        <div class="alert-item-description">Project is forecasted to exceed budget by 28% based on current burn rate ($1,850/day). Projected total: $128K vs $100K budget.</div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-item-title">Task At Risk: Backend API Development</div>
+                        <div class="alert-item-description">Due in 2 days but only 35% complete. 18 of 40 estimated hours used.</div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-item-title">High Burn Rate</div>
+                        <div class="alert-item-description">Current burn rate is 25% higher than planned. Consider resource reallocation.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team Section -->
+            <div class="team-section">
+                <span style="font-size: 13px; font-weight: 600; color: var(--text-secondary);">Team:</span>
+                <div class="avatar-group">
+                    <div class="avatar">SJ</div>
+                    <div class="avatar">JD</div>
+                    <div class="avatar">EC</div>
+                    <div class="avatar">MW</div>
+                    <div class="avatar">AL</div>
+                    <div class="avatar">KR</div>
+                </div>
+                <span class="team-count">6 members</span>
+            </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-box">
+                <div class="metric-header">
+                    <div class="metric-label">Tasks</div>
+                    <div class="metric-icon tasks">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 11l3 3L22 4"></path>
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="metric-value">18 / 24</div>
+                <div class="metric-detail">6 remaining</div>
+                <div class="metric-status critical">• 3 at risk, 1 overdue</div>
+            </div>
+
+            <div class="metric-box">
+                <div class="metric-header">
+                    <div class="metric-label">Budget</div>
+                    <div class="metric-icon budget">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23"></line>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="metric-value">$88K / $100K</div>
+                <div class="metric-detail">88% spent</div>
+                <div class="metric-status critical">• Forecasted: $128K (+28%)</div>
+            </div>
+
+            <div class="metric-box">
+                <div class="metric-header">
+                    <div class="metric-label">Timeline</div>
+                    <div class="metric-icon timeline">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                </div>
+                <div class="metric-value">43 / 75 days</div>
+                <div class="metric-detail">32 days remaining</div>
+                <div class="metric-status warning">• 57% elapsed</div>
+            </div>
+
+            <div class="metric-box">
+                <div class="metric-header">
+                    <div class="metric-label">Team</div>
+                    <div class="metric-icon team">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="metric-value">6 members</div>
+                <div class="metric-detail">Avg. 32 hrs/week</div>
+                <div class="metric-status success">• Balanced workload</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab-nav">
+                <button class="tab-button active" onclick="switchTab('tasks')">Tasks</button>
+                <button class="tab-button" onclick="switchTab('timeline')">Timeline</button>
+                <button class="tab-button" onclick="switchTab('budget')">Budget</button>
+                <button class="tab-button" onclick="switchTab('team')">Team</button>
+            </div>
+
+            <div class="tab-content">
+                <!-- Tasks Tab -->
+                <div class="tab-panel active" id="tasks-panel">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Assignee</th>
+                                <th>Status</th>
+                                <th>Due Date</th>
+                                <th>Progress</th>
+                                <th>Hours</th>
+                                <th>Health</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <span class="priority-badge high"></span>
+                                    <span class="task-title">Homepage Redesign</span>
+                                </td>
+                                <td>Emma Chen</td>
+                                <td><span class="status-badge done">Done</span></td>
+                                <td>Nov 5, 2025</td>
+                                <td>
+                                    <div class="progress-cell">
+                                        <div class="progress-bar-mini">
+                                            <div class="progress-fill" style="width: 100%"></div>
+                                        </div>
+                                        <span class="progress-text">100%</span>
+                                    </div>
+                                </td>
+                                <td>32 / 30</td>
+                                <td><span class="health-indicator on-track">✓ Complete</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="priority-badge high"></span>
+                                    <span class="task-title">Backend API Development</span>
+                                </td>
+                                <td>John Davis</td>
+                                <td><span class="status-badge in-progress">In Progress</span></td>
+                                <td>Nov 15, 2025</td>
+                                <td>
+                                    <div class="progress-cell">
+                                        <div class="progress-bar-mini">
+                                            <div class="progress-fill" style="width: 35%"></div>
+                                        </div>
+                                        <span class="progress-text">35%</span>
+                                    </div>
+                                </td>
+                                <td>18 / 40</td>
+                                <td><span class="health-indicator critical">⚠ At Risk</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="priority-badge medium"></span>
+                                    <span class="task-title">User Authentication Flow</span>
+                                </td>
+                                <td>Mike Wilson</td>
+                                <td><span class="status-badge in-progress">In Progress</span></td>
+                                <td>Nov 20, 2025</td>
+                                <td>
+                                    <div class="progress-cell">
+                                        <div class="progress-bar-mini">
+                                            <div class="progress-fill" style="width: 60%"></div>
+                                        </div>
+                                        <span class="progress-text">60%</span>
+                                    </div>
+                                </td>
+                                <td>24 / 35</td>
+                                <td><span class="health-indicator on-track">✓ On Track</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="priority-badge high"></span>
+                                    <span class="task-title">Product Gallery Component</span>
+                                </td>
+                                <td>Anna Lee</td>
+                                <td><span class="status-badge in-progress">In Progress</span></td>
+                                <td>Nov 18, 2025</td>
+                                <td>
+                                    <div class="progress-cell">
+                                        <div class="progress-bar-mini">
+                                            <div class="progress-fill" style="width: 75%"></div>
+                                        </div>
+                                        <span class="progress-text">75%</span>
+                                    </div>
+                                </td>
+                                <td>22 / 28</td>
+                                <td><span class="health-indicator on-track">✓ On Track</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="priority-badge medium"></span>
+                                    <span class="task-title">Shopping Cart Integration</span>
+                                </td>
+                                <td>Kate Roberts</td>
+                                <td><span class="status-badge todo">To Do</span></td>
+                                <td>Nov 25, 2025</td>
+                                <td>
+                                    <div class="progress-cell">
+                                        <div class="progress-bar-mini">
+                                            <div class="progress-fill" style="width: 0%"></div>
+                                        </div>
+                                        <span class="progress-text">0%</span>
+                                    </div>
+                                </td>
+                                <td>0 / 45</td>
+                                <td><span class="health-indicator on-track">— Not Started</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="priority-badge high"></span>
+                                    <span class="task-title">Payment Gateway Setup</span>
+                                </td>
+                                <td>John Davis</td>
+                                <td><span class="status-badge blocked">Blocked</span></td>
+                                <td>Nov 22, 2025</td>
+                                <td>
+                                    <div class="progress-cell">
+                                        <div class="progress-bar-mini">
+                                            <div class="progress-fill" style="width: 15%"></div>
+                                        </div>
+                                        <span class="progress-text">15%</span>
+                                    </div>
+                                </td>
+                                <td>8 / 50</td>
+                                <td><span class="health-indicator at-risk">⚠ Blocked</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="priority-badge low"></span>
+                                    <span class="task-title">Footer Navigation</span>
+                                </td>
+                                <td>Emma Chen</td>
+                                <td><span class="status-badge done">Done</span></td>
+                                <td>Nov 8, 2025</td>
+                                <td>
+                                    <div class="progress-cell">
+                                        <div class="progress-bar-mini">
+                                            <div class="progress-fill" style="width: 100%"></div>
+                                        </div>
+                                        <span class="progress-text">100%</span>
+                                    </div>
+                                </td>
+                                <td>12 / 12</td>
+                                <td><span class="health-indicator on-track">✓ Complete</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="priority-badge medium"></span>
+                                    <span class="task-title">Mobile Responsive Design</span>
+                                </td>
+                                <td>Anna Lee</td>
+                                <td><span class="status-badge in-progress">In Progress</span></td>
+                                <td>Dec 1, 2025</td>
+                                <td>
+                                    <div class="progress-cell">
+                                        <div class="progress-bar-mini">
+                                            <div class="progress-fill" style="width: 40%"></div>
+                                        </div>
+                                        <span class="progress-text">40%</span>
+                                    </div>
+                                </td>
+                                <td>18 / 40</td>
+                                <td><span class="health-indicator on-track">✓ On Track</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Timeline Tab -->
+                <div class="tab-panel" id="timeline-panel">
+                    <div class="chart-placeholder">
+                        📊 Gantt Chart / Timeline View
+                        <br>
+                        <small>(Visual timeline of all tasks with dependencies)</small>
+                    </div>
+                </div>
+
+                <!-- Budget Tab -->
+                <div class="tab-panel" id="budget-panel">
+                    <div style="text-align: center; padding: var(--spacing-xl);">
+                        <button class="btn btn-primary" onclick="window.location.href='budget-detail.html'">
+                            View Detailed Budget Analysis
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Team Tab -->
+                <div class="tab-panel" id="team-panel">
+                    <div class="chart-placeholder">
+                        👥 Team Members & Workload Distribution
+                        <br>
+                        <small>(Team member cards with task assignments and capacity)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insights Panel -->
+        <div class="insights-panel">
+            <h3 class="insights-title">Project Insights & Forecasting</h3>
+
+            <div class="chart-container">
+                <div class="chart-label">Budget Burn Rate Trend</div>
+                <div class="chart-placeholder">
+                    📈 Line Chart: Daily/Weekly Burn Rate
+                    <br>
+                    <small>(Shows spending trend and projected completion cost)</small>
+                </div>
+            </div>
+
+            <div class="insight-cards">
+                <div class="insight-card">
+                    <div class="insight-card-title">Current Burn Rate</div>
+                    <div class="insight-card-value" style="color: var(--error-red);">$1,850/day</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-card-title">Days of Budget Remaining</div>
+                    <div class="insight-card-value" style="color: var(--warning-yellow);">6.5 days</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-card-title">Completion Velocity</div>
+                    <div class="insight-card-value" style="color: var(--info-blue);">1.2% per day</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-card-title">Projected Finish Date</div>
+                    <div class="insight-card-value" style="color: var(--text-primary);">Dec 22, 2025</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAlerts() {
+            const panel = document.getElementById('alertsPanel');
+            const list = document.getElementById('alertsList');
+            const icon = document.getElementById('toggleIcon');
+
+            if (list.style.display === 'none') {
+                list.style.display = 'block';
+                icon.classList.add('expanded');
+                panel.classList.remove('collapsed');
+            } else {
+                list.style.display = 'none';
+                icon.classList.remove('expanded');
+                panel.classList.add('collapsed');
+            }
+        }
+
+        function switchTab(tabName) {
+            // Hide all panels
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+
+            // Deactivate all buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected panel
+            document.getElementById(tabName + '-panel').classList.add('active');
+
+            // Activate clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

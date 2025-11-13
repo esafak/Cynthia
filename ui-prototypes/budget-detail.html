@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Detail - Website Redesign</title>
+    <style>
+        /* Oracle Redwood Design System Styles */
+        :root {
+            --oracle-red: #C74634;
+            --success-green: #3A8026;
+            --warning-yellow: #F5C344;
+            --error-red: #C74634;
+            --info-blue: #2B5A9E;
+            --bg-light: #F8F8F8;
+            --bg-card: #FFFFFF;
+            --border-gray: #E0E0E0;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .app-header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-gray);
+            padding: var(--spacing-md) var(--spacing-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: var(--spacing-sm);
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .back-button:hover {
+            background-color: var(--bg-light);
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumb a {
+            color: var(--oracle-red);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-xl);
+        }
+
+        /* Budget Header */
+        .budget-header {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .budget-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .budget-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-xl);
+        }
+
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-value {
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        .summary-value.total {
+            color: var(--text-primary);
+        }
+
+        .summary-value.actual {
+            color: var(--info-blue);
+        }
+
+        .summary-value.forecast {
+            color: var(--error-red);
+        }
+
+        .summary-value.variance {
+            color: var(--error-red);
+        }
+
+        .summary-detail {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Health Gauge */
+        .health-section {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .gauge-container {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xl);
+            padding: var(--spacing-lg);
+            background-color: var(--bg-light);
+            border-radius: 8px;
+        }
+
+        .gauge-visual {
+            position: relative;
+            width: 180px;
+            height: 180px;
+        }
+
+        .gauge-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--error-red) 0% 88%,
+                var(--border-gray) 88% 100%
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gauge-inner {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gauge-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--error-red);
+        }
+
+        .gauge-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .gauge-info {
+            flex: 1;
+        }
+
+        .gauge-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .gauge-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.6;
+        }
+
+        .gauge-metrics {
+            display: flex;
+            gap: var(--spacing-xl);
+        }
+
+        .gauge-metric {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gauge-metric-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .gauge-metric-value {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        /* Alert Banner */
+        .alert-banner {
+            background-color: #FFEAEA;
+            border-left: 4px solid var(--error-red);
+            padding: var(--spacing-md);
+            border-radius: 4px;
+            margin-bottom: var(--spacing-xl);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+        }
+
+        .alert-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--error-red);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .alert-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Forecast Chart */
+        .chart-section {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            background: linear-gradient(180deg, #f5f7fa 0%, #ffffff 100%);
+            border-radius: 8px;
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .chart-canvas {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-xl);
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: 13px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
+        .legend-color.budget {
+            background-color: var(--text-secondary);
+        }
+
+        .legend-color.actual {
+            background-color: var(--info-blue);
+        }
+
+        .legend-color.forecast {
+            background-color: var(--error-red);
+            border: 2px dashed var(--error-red);
+            background: transparent;
+        }
+
+        /* Analysis Cards */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .analysis-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: var(--spacing-lg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .analysis-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .analysis-value {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .analysis-value.critical {
+            color: var(--error-red);
+        }
+
+        .analysis-value.warning {
+            color: var(--warning-yellow);
+        }
+
+        .analysis-value.info {
+            color: var(--info-blue);
+        }
+
+        .analysis-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Cost Breakdown Section */
+        .breakdown-section {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .breakdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .subsection-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+        }
+
+        .subsection-title:first-child {
+            margin-top: 0;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .data-table thead {
+            background-color: var(--bg-light);
+        }
+
+        .data-table th {
+            padding: var(--spacing-md);
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--border-gray);
+        }
+
+        .data-table th.right {
+            text-align: right;
+        }
+
+        .data-table td {
+            padding: var(--spacing-md);
+            border-bottom: 1px solid var(--border-gray);
+            font-size: 14px;
+        }
+
+        .data-table td.right {
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .data-table tr:hover {
+            background-color: var(--bg-light);
+        }
+
+        .data-table tfoot td {
+            font-weight: 600;
+            background-color: var(--bg-light);
+            border-top: 2px solid var(--border-gray);
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            background-color: #E6F0FA;
+            color: var(--info-blue);
+        }
+
+        .resource-name {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .resource-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 11px;
+            color: white;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .btn-primary {
+            background-color: var(--oracle-red);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #A83A2A;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--text-primary);
+            border: 1px solid var(--border-gray);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-light);
+        }
+
+        /* Recommendations */
+        .recommendations-section {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: var(--spacing-xl);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .recommendation-item {
+            display: flex;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            background-color: var(--bg-light);
+            border-radius: 6px;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .recommendation-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .recommendation-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--info-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: 600;
+        }
+
+        .recommendation-content {
+            flex: 1;
+        }
+
+        .recommendation-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .recommendation-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Icons */
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-left">
+            <button class="back-button" onclick="window.location.href='project-detail.html'">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+            </button>
+            <div class="breadcrumb">
+                <a href="dashboard.html">Dashboard</a> /
+                <a href="project-detail.html">Website Redesign</a> /
+                <span>Budget</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-secondary">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Export
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Budget Header -->
+        <div class="budget-header">
+            <h1 class="budget-title">Budget & Cost Tracking</h1>
+            <div class="budget-summary">
+                <div class="summary-item">
+                    <div class="summary-label">Total Budget</div>
+                    <div class="summary-value total">$100,000</div>
+                    <div class="summary-detail">Allocated budget</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Actual Costs</div>
+                    <div class="summary-value actual">$88,250</div>
+                    <div class="summary-detail">88.25% spent</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Forecasted Total</div>
+                    <div class="summary-value forecast">$128,000</div>
+                    <div class="summary-detail">Based on current burn rate</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-label">Variance</div>
+                    <div class="summary-value variance">+$28,000</div>
+                    <div class="summary-detail">+28% over budget</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert Banner -->
+        <div class="alert-banner">
+            <div class="alert-icon">!</div>
+            <div class="alert-content">
+                <div class="alert-title">Critical: Budget Overrun Predicted</div>
+                <div class="alert-description">
+                    At the current burn rate of $1,850/day, this project is forecasted to exceed the budget by 28% ($28,000).
+                    With 32 days remaining and only $11,750 left in the budget, you have approximately 6.4 days of budget remaining.
+                    Immediate action required: reduce scope, reallocate resources, or request additional funding.
+                </div>
+            </div>
+        </div>
+
+        <!-- Health Gauge -->
+        <div class="health-section">
+            <h2 class="section-title">Budget Health Indicator</h2>
+            <div class="gauge-container">
+                <div class="gauge-visual">
+                    <div class="gauge-circle">
+                        <div class="gauge-inner">
+                            <div class="gauge-value">88%</div>
+                            <div class="gauge-label">Budget Used</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gauge-info">
+                    <div class="gauge-title">Budget vs. Progress Comparison</div>
+                    <div class="gauge-description">
+                        You've spent 88% of your budget but only completed 68% of the project. This 20 percentage point
+                        gap indicates you're spending faster than you're progressing, which is a critical warning sign for
+                        budget overrun.
+                    </div>
+                    <div class="gauge-metrics">
+                        <div class="gauge-metric">
+                            <div class="gauge-metric-label">Budget Spent</div>
+                            <div class="gauge-metric-value" style="color: var(--error-red);">88%</div>
+                        </div>
+                        <div class="gauge-metric">
+                            <div class="gauge-metric-label">Project Complete</div>
+                            <div class="gauge-metric-value" style="color: var(--info-blue);">68%</div>
+                        </div>
+                        <div class="gauge-metric">
+                            <div class="gauge-metric-label">Health Gap</div>
+                            <div class="gauge-metric-value" style="color: var(--error-red);">-20%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forecast Chart -->
+        <div class="chart-section">
+            <h2 class="section-title">Cost Forecast & Burn Rate Trend</h2>
+            <div class="chart-container">
+                <div class="chart-canvas">
+                    <svg width="100%" height="100%" viewBox="0 0 800 250">
+                        <!-- Grid lines -->
+                        <line x1="0" y1="200" x2="800" y2="200" stroke="#E0E0E0" stroke-width="1"/>
+                        <line x1="0" y1="150" x2="800" y2="150" stroke="#E0E0E0" stroke-width="1"/>
+                        <line x1="0" y1="100" x2="800" y2="100" stroke="#E0E0E0" stroke-width="1"/>
+                        <line x1="0" y1="50" x2="800" y2="50" stroke="#E0E0E0" stroke-width="1"/>
+
+                        <!-- Y-axis labels -->
+                        <text x="5" y="205" font-size="11" fill="#666">$0</text>
+                        <text x="5" y="155" font-size="11" fill="#666">$50K</text>
+                        <text x="5" y="105" font-size="11" fill="#666">$100K</text>
+                        <text x="5" y="55" font-size="11" fill="#666">$150K</text>
+
+                        <!-- Budget line (horizontal) -->
+                        <line x1="50" y1="100" x2="750" y2="100" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+                        <text x="755" y="105" font-size="11" fill="#666" font-weight="600">Budget</text>
+
+                        <!-- Actual costs (solid line up to current) -->
+                        <path d="M 50 200 L 150 180 L 250 155 L 350 125 L 450 115 L 550 112"
+                              stroke="#2B5A9E" stroke-width="3" fill="none"/>
+                        <circle cx="550" cy="112" r="5" fill="#2B5A9E"/>
+
+                        <!-- Forecasted costs (dashed line) -->
+                        <path d="M 550 112 L 650 60 L 750 35"
+                              stroke="#C74634" stroke-width="3" stroke-dasharray="8,4" fill="none"/>
+                        <circle cx="750" cy="35" r="5" fill="#C74634"/>
+
+                        <!-- Current day marker -->
+                        <line x1="550" y1="0" x2="550" y2="220" stroke="#F5C344" stroke-width="2" stroke-dasharray="3,3"/>
+                        <text x="520" y="235" font-size="11" fill="#C8900D" font-weight="600">Today</text>
+
+                        <!-- X-axis labels -->
+                        <text x="50" y="230" font-size="11" fill="#666">Week 1</text>
+                        <text x="250" y="230" font-size="11" fill="#666">Week 4</text>
+                        <text x="450" y="230" font-size="11" fill="#666">Week 7</text>
+                        <text x="650" y="230" font-size="11" fill="#666">Week 10</text>
+
+                        <!-- Forecast annotation -->
+                        <text x="680" y="30" font-size="12" fill="#C74634" font-weight="600">$128K</text>
+                        <text x="665" y="45" font-size="10" fill="#C74634">(+28%)</text>
+                    </svg>
+                </div>
+            </div>
+            <div class="chart-legend">
+                <div class="legend-item">
+                    <div class="legend-color budget"></div>
+                    <span>Total Budget ($100K)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color actual"></div>
+                    <span>Actual Costs (to date)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color forecast"></div>
+                    <span>Forecasted Costs (projected)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cost Analysis Cards -->
+        <div class="analysis-grid">
+            <div class="analysis-card">
+                <div class="analysis-label">Current Burn Rate</div>
+                <div class="analysis-value critical">$1,850/day</div>
+                <div class="analysis-subtitle">25% above planned rate</div>
+            </div>
+            <div class="analysis-card">
+                <div class="analysis-label">Projected Completion</div>
+                <div class="analysis-value critical">$128,000</div>
+                <div class="analysis-subtitle">28% over budget</div>
+            </div>
+            <div class="analysis-card">
+                <div class="analysis-label">Budget Remaining</div>
+                <div class="analysis-value warning">$11,750</div>
+                <div class="analysis-subtitle">11.75% of total</div>
+            </div>
+            <div class="analysis-card">
+                <div class="analysis-label">Days of Budget Left</div>
+                <div class="analysis-value critical">6.4 days</div>
+                <div class="analysis-subtitle">32 days remaining in project</div>
+            </div>
+        </div>
+
+        <!-- Cost Breakdown -->
+        <div class="breakdown-section">
+            <div class="breakdown-header">
+                <h2 class="section-title" style="margin: 0;">Cost Breakdown</h2>
+                <button class="btn btn-primary">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Cost
+                </button>
+            </div>
+
+            <!-- Fixed Costs -->
+            <h3 class="subsection-title">Fixed Costs</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th class="right">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Adobe Creative Cloud Licenses</td>
+                        <td><span class="category-badge">Licenses</span></td>
+                        <td>Oct 1, 2025</td>
+                        <td class="right">$2,500</td>
+                    </tr>
+                    <tr>
+                        <td>Stock Photography Bundle</td>
+                        <td><span class="category-badge">Materials</span></td>
+                        <td>Oct 15, 2025</td>
+                        <td class="right">$1,200</td>
+                    </tr>
+                    <tr>
+                        <td>Server Infrastructure Setup</td>
+                        <td><span class="category-badge">External Vendors</span></td>
+                        <td>Oct 20, 2025</td>
+                        <td class="right">$5,800</td>
+                    </tr>
+                    <tr>
+                        <td>SSL Certificates & Security Tools</td>
+                        <td><span class="category-badge">Licenses</span></td>
+                        <td>Oct 25, 2025</td>
+                        <td class="right">$750</td>
+                    </tr>
+                    <tr>
+                        <td>Third-party API Integration Service</td>
+                        <td><span class="category-badge">External Vendors</span></td>
+                        <td>Nov 1, 2025</td>
+                        <td class="right">$3,200</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">Total Fixed Costs</td>
+                        <td class="right">$13,450</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <!-- Time-Based Costs -->
+            <h3 class="subsection-title">Time-Based Costs (Labor)</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Resource</th>
+                        <th>Role</th>
+                        <th class="right">Hours Logged</th>
+                        <th class="right">Hourly Rate</th>
+                        <th class="right">Total Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="resource-name">
+                                <div class="resource-avatar" style="background: linear-gradient(135deg, #667eea, #764ba2);">SJ</div>
+                                <span>Sarah Johnson (PM)</span>
+                            </div>
+                        </td>
+                        <td>Project Manager</td>
+                        <td class="right">168 hrs</td>
+                        <td class="right">$125/hr</td>
+                        <td class="right">$21,000</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="resource-name">
+                                <div class="resource-avatar" style="background: linear-gradient(135deg, #f093fb, #f5576c);">JD</div>
+                                <span>John Davis</span>
+                            </div>
+                        </td>
+                        <td>Backend Developer</td>
+                        <td class="right">192 hrs</td>
+                        <td class="right">$110/hr</td>
+                        <td class="right">$21,120</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="resource-name">
+                                <div class="resource-avatar" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">EC</div>
+                                <span>Emma Chen</span>
+                            </div>
+                        </td>
+                        <td>UI/UX Designer</td>
+                        <td class="right">156 hrs</td>
+                        <td class="right">$95/hr</td>
+                        <td class="right">$14,820</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="resource-name">
+                                <div class="resource-avatar" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">MW</div>
+                                <span>Mike Wilson</span>
+                            </div>
+                        </td>
+                        <td>Full-Stack Developer</td>
+                        <td class="right">148 hrs</td>
+                        <td class="right">$105/hr</td>
+                        <td class="right">$15,540</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="resource-name">
+                                <div class="resource-avatar" style="background: linear-gradient(135deg, #fa709a, #fee140);">AL</div>
+                                <span>Anna Lee</span>
+                            </div>
+                        </td>
+                        <td>Frontend Developer</td>
+                        <td class="right">124 hrs</td>
+                        <td class="right">$100/hr</td>
+                        <td class="right">$12,400</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="resource-name">
+                                <div class="resource-avatar" style="background: linear-gradient(135deg, #30cfd0, #330867);">KR</div>
+                                <span>Kate Roberts</span>
+                            </div>
+                        </td>
+                        <td>QA Engineer</td>
+                        <td class="right">86 hrs</td>
+                        <td class="right">$85/hr</td>
+                        <td class="right">$7,310</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2">Total Labor Costs</td>
+                        <td class="right">874 hrs</td>
+                        <td class="right">—</td>
+                        <td class="right">$92,190</td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <!-- Grand Total -->
+            <table class="data-table" style="margin-top: var(--spacing-xl);">
+                <tfoot>
+                    <tr style="background-color: #E6F0FA;">
+                        <td colspan="4" style="font-size: 16px; padding: var(--spacing-lg);">
+                            <strong>Grand Total (Fixed + Labor)</strong>
+                        </td>
+                        <td class="right" style="font-size: 18px; padding: var(--spacing-lg);">
+                            <strong>$105,640</strong>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="recommendations-section">
+            <h2 class="section-title">AI-Powered Recommendations</h2>
+
+            <div class="recommendation-item">
+                <div class="recommendation-icon">1</div>
+                <div class="recommendation-content">
+                    <div class="recommendation-title">Reduce Scope by 15-20%</div>
+                    <div class="recommendation-description">
+                        Consider deferring 3-4 low-priority tasks to a future phase. This could save approximately
+                        $18,000-$24,000 and bring the project back within budget. Recommended tasks to defer:
+                        Shopping Cart Integration, Mobile Responsive Design.
+                    </div>
+                </div>
+            </div>
+
+            <div class="recommendation-item">
+                <div class="recommendation-icon">2</div>
+                <div class="recommendation-content">
+                    <div class="recommendation-title">Reallocate Resources to Critical Path</div>
+                    <div class="recommendation-description">
+                        Focus high-cost resources (John Davis at $110/hr) on critical tasks only. Move lower-priority
+                        work to more cost-effective resources. This could reduce burn rate by 15-20%.
+                    </div>
+                </div>
+            </div>
+
+            <div class="recommendation-item">
+                <div class="recommendation-icon">3</div>
+                <div class="recommendation-content">
+                    <div class="recommendation-title">Request Budget Increase</div>
+                    <div class="recommendation-description">
+                        If all scope is critical, prepare a budget amendment request for an additional $28,000-$30,000
+                        to complete the project as planned. Include this forecast data and justification.
+                    </div>
+                </div>
+            </div>
+
+            <div class="recommendation-item">
+                <div class="recommendation-icon">4</div>
+                <div class="recommendation-content">
+                    <div class="recommendation-title">Implement Stricter Time Tracking</div>
+                    <div class="recommendation-description">
+                        Some tasks are showing effort overruns. Implement daily time tracking check-ins to catch
+                        overages earlier and adjust plans before burning through remaining budget.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add interactivity for demo purposes
+        console.log('Budget Detail Page Loaded');
+        console.log('Burn Rate: $1,850/day');
+        console.log('Forecast: $128,000 (28% over)');
+    </script>
+</body>
+</html>

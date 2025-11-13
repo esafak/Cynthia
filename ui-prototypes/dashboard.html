@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Dashboard - Proactive Project Management</title>
+    <style>
+        /* Oracle Redwood Design System Styles */
+        :root {
+            --oracle-red: #C74634;
+            --success-green: #3A8026;
+            --warning-yellow: #F5C344;
+            --error-red: #C74634;
+            --info-blue: #2B5A9E;
+            --bg-light: #F8F8F8;
+            --bg-card: #FFFFFF;
+            --border-gray: #E0E0E0;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .app-header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-gray);
+            padding: var(--spacing-md) var(--spacing-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .app-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--oracle-red);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .notification-bell {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: var(--spacing-sm);
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .notification-bell:hover {
+            background-color: var(--bg-light);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background-color: var(--error-red);
+            color: white;
+            border-radius: 10px;
+            padding: 2px 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--info-blue), var(--oracle-red));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-xl);
+        }
+
+        /* Key Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .metric-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: var(--spacing-lg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .metric-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .metric-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .metric-trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 500;
+        }
+
+        .metric-trend.up {
+            color: var(--error-red);
+        }
+
+        .metric-trend.down {
+            color: var(--success-green);
+        }
+
+        /* Alerts Section */
+        .alerts-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .filter-chips {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .chip {
+            padding: 6px 12px;
+            border-radius: 16px;
+            border: 1px solid var(--border-gray);
+            background-color: var(--bg-card);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip.active {
+            background-color: var(--oracle-red);
+            color: white;
+            border-color: var(--oracle-red);
+        }
+
+        .alerts-container {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .alert {
+            background-color: var(--bg-card);
+            border-left: 4px solid;
+            border-radius: 4px;
+            padding: var(--spacing-md);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+        }
+
+        .alert:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+
+        .alert.critical {
+            border-left-color: var(--error-red);
+        }
+
+        .alert.warning {
+            border-left-color: var(--warning-yellow);
+        }
+
+        .alert.info {
+            border-left-color: var(--info-blue);
+        }
+
+        .alert-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .alert.critical .alert-icon {
+            background-color: #FFEAEA;
+            color: var(--error-red);
+        }
+
+        .alert.warning .alert-icon {
+            background-color: #FFF9E6;
+            color: #C8900D;
+        }
+
+        .alert.info .alert-icon {
+            background-color: #E6F0FA;
+            color: var(--info-blue);
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .alert-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .alert-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Projects Section */
+        .projects-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .project-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: var(--spacing-lg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            transition: all 0.2s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+        }
+
+        .project-card.health-green::before {
+            background-color: var(--success-green);
+        }
+
+        .project-card.health-yellow::before {
+            background-color: var(--warning-yellow);
+        }
+
+        .project-card.health-red::before {
+            background-color: var(--error-red);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .project-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .project-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .project-status.active {
+            background-color: #E6F0FA;
+            color: var(--info-blue);
+        }
+
+        .health-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .health-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: white;
+        }
+
+        .health-circle.green {
+            background-color: var(--success-green);
+        }
+
+        .health-circle.yellow {
+            background-color: var(--warning-yellow);
+            color: #333;
+        }
+
+        .health-circle.red {
+            background-color: var(--error-red);
+        }
+
+        .health-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .project-progress {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-xs);
+            font-size: 13px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: var(--bg-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--info-blue), var(--oracle-red));
+            transition: width 0.3s ease;
+        }
+
+        .project-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .stat-value {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .project-alerts {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            background-color: #FFEAEA;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .project-alerts.warning {
+            background-color: #FFF9E6;
+        }
+
+        .alert-count {
+            font-weight: 600;
+            color: var(--error-red);
+        }
+
+        .alert-count.warning {
+            color: #C8900D;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .btn-primary {
+            background-color: var(--oracle-red);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #A83A2A;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--text-primary);
+            border: 1px solid var(--border-gray);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--bg-light);
+        }
+
+        /* Icons (using simple SVG shapes) */
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="app-title">Proactive Project Management</div>
+        <div class="header-actions">
+            <button class="notification-bell">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span class="notification-badge">8</span>
+            </button>
+            <div class="user-profile">
+                <div class="avatar">PM</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Total Projects</div>
+                <div class="metric-value">8</div>
+                <div class="metric-subtitle">2 completed this month</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Projects At Risk</div>
+                <div class="metric-value">3</div>
+                <div class="metric-subtitle">
+                    <span class="metric-trend up">↑ 1</span> from last week
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Total Budget</div>
+                <div class="metric-value">$542K</div>
+                <div class="metric-subtitle">$478K spent (88%)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Tasks Due This Week</div>
+                <div class="metric-value">23</div>
+                <div class="metric-subtitle">18 on track, 5 at risk</div>
+            </div>
+        </div>
+
+        <!-- Alerts Section -->
+        <section class="alerts-section">
+            <div class="section-header">
+                <h2 class="section-title">Alerts & Insights</h2>
+                <div class="filter-chips">
+                    <div class="chip active">All (8)</div>
+                    <div class="chip">Critical (3)</div>
+                    <div class="chip">Warning (4)</div>
+                    <div class="chip">Info (1)</div>
+                </div>
+            </div>
+            <div class="alerts-container">
+                <div class="alert critical">
+                    <div class="alert-icon">!</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Budget Overrun Predicted - Website Redesign</div>
+                        <div class="alert-description">Project is forecasted to exceed budget by 28% based on current burn rate ($1,850/day). Projected total: $128K vs $100K budget.</div>
+                        <div class="alert-meta">Project: Website Redesign • 2 hours ago</div>
+                    </div>
+                </div>
+
+                <div class="alert critical">
+                    <div class="alert-icon">!</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Task At Risk - API Integration Module</div>
+                        <div class="alert-description">Task "Backend API Development" due in 2 days but only 35% complete. 18 of 40 estimated hours used.</div>
+                        <div class="alert-meta">Project: Mobile App v2.0 • Assigned to: John Davis • 3 hours ago</div>
+                    </div>
+                </div>
+
+                <div class="alert warning">
+                    <div class="alert-icon">⚠</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Task Not Started - User Testing Phase</div>
+                        <div class="alert-description">Task was scheduled to start 1 day ago but hasn't been started yet.</div>
+                        <div class="alert-meta">Project: E-commerce Platform • Assigned to: Sarah Chen • 5 hours ago</div>
+                    </div>
+                </div>
+
+                <div class="alert warning">
+                    <div class="alert-icon">⚠</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Effort Overrun - Database Migration</div>
+                        <div class="alert-description">Task has used 23 of 20 estimated hours (115%). Consider updating estimate or investigating delays.</div>
+                        <div class="alert-meta">Project: Cloud Migration • Assigned to: Mike Johnson • 1 day ago</div>
+                    </div>
+                </div>
+
+                <div class="alert warning">
+                    <div class="alert-icon">⚠</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Task At Risk - UI Component Library</div>
+                        <div class="alert-description">Task due in 3 days but only 42% complete.</div>
+                        <div class="alert-meta">Project: Design System • Assigned to: Emma Wilson • 1 day ago</div>
+                    </div>
+                </div>
+
+                <div class="alert info">
+                    <div class="alert-icon">i</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Project On Track - Marketing Campaign</div>
+                        <div class="alert-description">All tasks progressing well. 67% complete with 45% of timeline elapsed. Under budget by 8%.</div>
+                        <div class="alert-meta">Project: Q4 Marketing Campaign • 2 days ago</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section class="projects-section">
+            <div class="section-header">
+                <h2 class="section-title">Your Projects</h2>
+                <button class="btn btn-primary">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    New Project
+                </button>
+            </div>
+
+            <div class="projects-grid">
+                <!-- Project Card 1 -->
+                <div class="project-card health-red">
+                    <div class="project-header">
+                        <div>
+                            <div class="project-title">Website Redesign</div>
+                            <span class="project-status active">Active</span>
+                        </div>
+                        <div class="health-score">
+                            <div class="health-circle red">42</div>
+                            <div class="health-label">Health</div>
+                        </div>
+                    </div>
+                    <div class="project-progress">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span><strong>68%</strong></span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 68%"></div>
+                        </div>
+                    </div>
+                    <div class="project-stats">
+                        <div class="stat">
+                            <div class="stat-label">Budget</div>
+                            <div class="stat-value">$88K / $100K</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Due Date</div>
+                            <div class="stat-value">Dec 15, 2025</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Tasks</div>
+                            <div class="stat-value">18 / 24</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Team</div>
+                            <div class="stat-value">6 members</div>
+                        </div>
+                    </div>
+                    <div class="project-alerts">
+                        <span class="alert-count">3 critical alerts</span>
+                        <span>• Budget overrun predicted</span>
+                    </div>
+                </div>
+
+                <!-- Project Card 2 -->
+                <div class="project-card health-yellow">
+                    <div class="project-header">
+                        <div>
+                            <div class="project-title">Mobile App v2.0</div>
+                            <span class="project-status active">Active</span>
+                        </div>
+                        <div class="health-score">
+                            <div class="health-circle yellow">72</div>
+                            <div class="health-label">Health</div>
+                        </div>
+                    </div>
+                    <div class="project-progress">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span><strong>45%</strong></span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 45%"></div>
+                        </div>
+                    </div>
+                    <div class="project-stats">
+                        <div class="stat">
+                            <div class="stat-label">Budget</div>
+                            <div class="stat-value">$52K / $75K</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Due Date</div>
+                            <div class="stat-value">Jan 30, 2026</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Tasks</div>
+                            <div class="stat-value">12 / 28</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Team</div>
+                            <div class="stat-value">8 members</div>
+                        </div>
+                    </div>
+                    <div class="project-alerts warning">
+                        <span class="alert-count warning">2 warnings</span>
+                        <span>• 1 task at risk</span>
+                    </div>
+                </div>
+
+                <!-- Project Card 3 -->
+                <div class="project-card health-green">
+                    <div class="project-header">
+                        <div>
+                            <div class="project-title">Q4 Marketing Campaign</div>
+                            <span class="project-status active">Active</span>
+                        </div>
+                        <div class="health-score">
+                            <div class="health-circle green">89</div>
+                            <div class="health-label">Health</div>
+                        </div>
+                    </div>
+                    <div class="project-progress">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span><strong>67%</strong></span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 67%"></div>
+                        </div>
+                    </div>
+                    <div class="project-stats">
+                        <div class="stat">
+                            <div class="stat-label">Budget</div>
+                            <div class="stat-value">$28K / $35K</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Due Date</div>
+                            <div class="stat-value">Dec 31, 2025</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Tasks</div>
+                            <div class="stat-value">14 / 18</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Team</div>
+                            <div class="stat-value">4 members</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Card 4 -->
+                <div class="project-card health-green">
+                    <div class="project-header">
+                        <div>
+                            <div class="project-title">Cloud Migration</div>
+                            <span class="project-status active">Active</span>
+                        </div>
+                        <div class="health-score">
+                            <div class="health-circle green">84</div>
+                            <div class="health-label">Health</div>
+                        </div>
+                    </div>
+                    <div class="project-progress">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span><strong>82%</strong></span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 82%"></div>
+                        </div>
+                    </div>
+                    <div class="project-stats">
+                        <div class="stat">
+                            <div class="stat-label">Budget</div>
+                            <div class="stat-value">$118K / $150K</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Due Date</div>
+                            <div class="stat-value">Nov 28, 2025</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Tasks</div>
+                            <div class="stat-value">32 / 36</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Team</div>
+                            <div class="stat-value">10 members</div>
+                        </div>
+                    </div>
+                    <div class="project-alerts warning">
+                        <span class="alert-count warning">1 warning</span>
+                        <span>• Effort overrun on 1 task</span>
+                    </div>
+                </div>
+
+                <!-- Project Card 5 -->
+                <div class="project-card health-yellow">
+                    <div class="project-header">
+                        <div>
+                            <div class="project-title">E-commerce Platform</div>
+                            <span class="project-status active">Active</span>
+                        </div>
+                        <div class="health-score">
+                            <div class="health-circle yellow">68</div>
+                            <div class="health-label">Health</div>
+                        </div>
+                    </div>
+                    <div class="project-progress">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span><strong>56%</strong></span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 56%"></div>
+                        </div>
+                    </div>
+                    <div class="project-stats">
+                        <div class="stat">
+                            <div class="stat-label">Budget</div>
+                            <div class="stat-value">$92K / $120K</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Due Date</div>
+                            <div class="stat-value">Feb 14, 2026</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Tasks</div>
+                            <div class="stat-value">22 / 42</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Team</div>
+                            <div class="stat-value">7 members</div>
+                        </div>
+                    </div>
+                    <div class="project-alerts warning">
+                        <span class="alert-count warning">1 warning</span>
+                        <span>• Task not started</span>
+                    </div>
+                </div>
+
+                <!-- Project Card 6 -->
+                <div class="project-card health-green">
+                    <div class="project-header">
+                        <div>
+                            <div class="project-title">Design System</div>
+                            <span class="project-status active">Active</span>
+                        </div>
+                        <div class="health-score">
+                            <div class="health-circle green">91</div>
+                            <div class="health-label">Health</div>
+                        </div>
+                    </div>
+                    <div class="project-progress">
+                        <div class="progress-label">
+                            <span>Progress</span>
+                            <span><strong>78%</strong></span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 78%"></div>
+                        </div>
+                    </div>
+                    <div class="project-stats">
+                        <div class="stat">
+                            <div class="stat-label">Budget</div>
+                            <div class="stat-value">$38K / $45K</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Due Date</div>
+                            <div class="stat-value">Dec 10, 2025</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Tasks</div>
+                            <div class="stat-value">16 / 20</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-label">Team</div>
+                            <div class="stat-value">5 members</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Simple interactivity
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', function() {
+                window.location.href = 'project-detail.html';
+            });
+        });
+
+        document.querySelectorAll('.alert').forEach(alert => {
+            alert.addEventListener('click', function() {
+                alert.style.backgroundColor = '#F8F8F8';
+            });
+        });
+    </script>
+</body>
+</html>
