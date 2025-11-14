@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Dashboard - Proactive PM (Oracle JET Redwood)</title>
+
+    <!-- Oracle JET Redwood CSS from CDN -->
+    <link rel="stylesheet" href="https://static.oracle.com/cdn/jet/18.0.0/default/css/redwood/oj-redwood-min.css" type="text/css"/>
+
+    <style>
+        /* Custom application styles for layout */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Oracle Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        /* Header styling */
+        .app-header {
+            padding: var(--oj-core-spacing-4x);
+            border-bottom: 1px solid var(--oj-palette-neutral-40);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--oj-palette-neutral-0);
+        }
+
+        .app-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--oj-palette-brand-100);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: var(--oj-core-spacing-3x);
+            align-items: center;
+        }
+
+        /* Main container */
+        .container {
+            padding: var(--oj-core-spacing-6x);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Section spacing */
+        .section {
+            margin-bottom: var(--oj-core-spacing-8x);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--oj-core-spacing-4x);
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        /* Metrics grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--oj-core-spacing-4x);
+            margin-bottom: var(--oj-core-spacing-6x);
+        }
+
+        /* Alert filters */
+        .alert-filters {
+            display: flex;
+            gap: var(--oj-core-spacing-2x);
+        }
+
+        /* Alerts list */
+        .alerts-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--oj-core-spacing-3x);
+        }
+
+        /* Projects grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: var(--oj-core-spacing-5x);
+        }
+
+        /* Custom card content */
+        .metric-content {
+            padding: var(--oj-core-spacing-4x);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--oj-palette-neutral-100);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--oj-core-spacing-1x);
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: var(--oj-core-spacing-1x);
+        }
+
+        .metric-subtitle {
+            font-size: 0.8125rem;
+            color: var(--oj-palette-neutral-100);
+        }
+
+        /* Alert card content */
+        .alert-card {
+            border-left: 4px solid;
+        }
+
+        .alert-card.critical {
+            border-left-color: var(--oj-palette-danger-80);
+            background-color: var(--oj-palette-danger-10);
+        }
+
+        .alert-card.warning {
+            border-left-color: var(--oj-palette-warning-80);
+            background-color: var(--oj-palette-warning-10);
+        }
+
+        .alert-card.info {
+            border-left-color: var(--oj-palette-info-80);
+            background-color: var(--oj-palette-info-10);
+        }
+
+        .alert-content {
+            padding: var(--oj-core-spacing-3x);
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: var(--oj-core-spacing-1x);
+        }
+
+        .alert-description {
+            font-size: 0.8125rem;
+            color: var(--oj-palette-neutral-130);
+            margin-bottom: var(--oj-core-spacing-1x);
+        }
+
+        .alert-meta {
+            font-size: 0.75rem;
+            color: var(--oj-palette-neutral-100);
+        }
+
+        /* Project card content */
+        .project-content {
+            padding: var(--oj-core-spacing-4x);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--oj-core-spacing-3x);
+        }
+
+        .project-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--oj-core-spacing-1x);
+        }
+
+        .health-badge {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: white;
+        }
+
+        .health-badge.red {
+            background-color: var(--oj-palette-danger-80);
+        }
+
+        .health-badge.yellow {
+            background-color: var(--oj-palette-warning-80);
+            color: var(--oj-palette-neutral-170);
+        }
+
+        .health-badge.green {
+            background-color: var(--oj-palette-success-80);
+        }
+
+        .project-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--oj-core-spacing-3x);
+            margin-top: var(--oj-core-spacing-3x);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--oj-palette-neutral-100);
+        }
+
+        .stat-value {
+            font-weight: 600;
+        }
+
+        .project-alert-banner {
+            margin-top: var(--oj-core-spacing-3x);
+            padding: var(--oj-core-spacing-2x);
+            background-color: var(--oj-palette-danger-10);
+            border-radius: 4px;
+            font-size: 0.8125rem;
+        }
+
+        .project-alert-banner.warning {
+            background-color: var(--oj-palette-warning-10);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="app-header">
+        <div class="app-title">Proactive Project Management</div>
+        <div class="header-actions">
+            <oj-button id="notificationBtn" chroming="borderless">
+                <span slot="startIcon" class="oj-ux-ico-bell"></span>
+                <oj-badge size="sm" edge="end">8</oj-badge>
+            </oj-button>
+            <oj-avatar size="xs" initials="PM"></oj-avatar>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <!-- Metric 1 -->
+            <oj-action-card>
+                <div class="metric-content">
+                    <div class="metric-label">Total Projects</div>
+                    <div class="metric-value">8</div>
+                    <div class="metric-subtitle">2 completed this month</div>
+                </div>
+            </oj-action-card>
+
+            <!-- Metric 2 -->
+            <oj-action-card>
+                <div class="metric-content">
+                    <div class="metric-label">Projects At Risk</div>
+                    <div class="metric-value">3</div>
+                    <div class="metric-subtitle">
+                        <span style="color: var(--oj-palette-danger-80);">↑ 1</span> from last week
+                    </div>
+                </div>
+            </oj-action-card>
+
+            <!-- Metric 3 -->
+            <oj-action-card>
+                <div class="metric-content">
+                    <div class="metric-label">Total Budget</div>
+                    <div class="metric-value">$542K</div>
+                    <div class="metric-subtitle">$478K spent (88%)</div>
+                </div>
+            </oj-action-card>
+
+            <!-- Metric 4 -->
+            <oj-action-card>
+                <div class="metric-content">
+                    <div class="metric-label">Tasks Due This Week</div>
+                    <div class="metric-value">23</div>
+                    <div class="metric-subtitle">18 on track, 5 at risk</div>
+                </div>
+            </oj-action-card>
+        </div>
+
+        <!-- Alerts Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Alerts & Insights</h2>
+                <div class="alert-filters">
+                    <oj-button-set-one id="alertFilter">
+                        <oj-option value="all">All (8)</oj-option>
+                        <oj-option value="critical">Critical (3)</oj-option>
+                        <oj-option value="warning">Warning (4)</oj-option>
+                        <oj-option value="info">Info (1)</oj-option>
+                    </oj-button-set-one>
+                </div>
+            </div>
+
+            <div class="alerts-list">
+                <!-- Critical Alert 1 -->
+                <oj-action-card class="alert-card critical">
+                    <div class="alert-content">
+                        <oj-status-indicator-icon severity="error" size="sm"></oj-status-indicator-icon>
+                        <div class="alert-title">Budget Overrun Predicted - Website Redesign</div>
+                        <div class="alert-description">
+                            Project is forecasted to exceed budget by 28% based on current burn rate ($1,850/day).
+                            Projected total: $128K vs $100K budget.
+                        </div>
+                        <div class="alert-meta">Project: Website Redesign • 2 hours ago</div>
+                    </div>
+                </oj-action-card>
+
+                <!-- Critical Alert 2 -->
+                <oj-action-card class="alert-card critical">
+                    <div class="alert-content">
+                        <oj-status-indicator-icon severity="error" size="sm"></oj-status-indicator-icon>
+                        <div class="alert-title">Task At Risk - API Integration Module</div>
+                        <div class="alert-description">
+                            Task "Backend API Development" due in 2 days but only 35% complete. 18 of 40 estimated hours used.
+                        </div>
+                        <div class="alert-meta">Project: Mobile App v2.0 • Assigned to: John Davis • 3 hours ago</div>
+                    </div>
+                </oj-action-card>
+
+                <!-- Warning Alert -->
+                <oj-action-card class="alert-card warning">
+                    <div class="alert-content">
+                        <oj-status-indicator-icon severity="warning" size="sm"></oj-status-indicator-icon>
+                        <div class="alert-title">Task Not Started - User Testing Phase</div>
+                        <div class="alert-description">
+                            Task was scheduled to start 1 day ago but hasn't been started yet.
+                        </div>
+                        <div class="alert-meta">Project: E-commerce Platform • Assigned to: Sarah Chen • 5 hours ago</div>
+                    </div>
+                </oj-action-card>
+
+                <!-- Info Alert -->
+                <oj-action-card class="alert-card info">
+                    <div class="alert-content">
+                        <oj-status-indicator-icon severity="info" size="sm"></oj-status-indicator-icon>
+                        <div class="alert-title">Project On Track - Marketing Campaign</div>
+                        <div class="alert-description">
+                            All tasks progressing well. 67% complete with 45% of timeline elapsed. Under budget by 8%.
+                        </div>
+                        <div class="alert-meta">Project: Q4 Marketing Campaign • 2 days ago</div>
+                    </div>
+                </oj-action-card>
+            </div>
+        </div>
+
+        <!-- Projects Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Your Projects</h2>
+                <oj-button id="newProjectBtn" chroming="callToAction">
+                    <span slot="startIcon" class="oj-ux-ico-plus"></span>
+                    New Project
+                </oj-button>
+            </div>
+
+            <div class="projects-grid">
+                <!-- Project 1 - Critical -->
+                <oj-action-card>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <div>
+                                <div class="project-title">Website Redesign</div>
+                                <oj-badge edge="start" size="sm">Active</oj-badge>
+                            </div>
+                            <div class="health-badge red">42</div>
+                        </div>
+
+                        <div>
+                            <oj-progress-bar value="68"></oj-progress-bar>
+                            <div style="font-size: 0.75rem; margin-top: 4px; color: var(--oj-palette-neutral-100);">
+                                Progress: 68%
+                            </div>
+                        </div>
+
+                        <div class="project-stats">
+                            <div>
+                                <div class="stat-label">Budget</div>
+                                <div class="stat-value">$88K / $100K</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Due Date</div>
+                                <div class="stat-value">Dec 15, 2025</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Tasks</div>
+                                <div class="stat-value">18 / 24</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Team</div>
+                                <div class="stat-value">6 members</div>
+                            </div>
+                        </div>
+
+                        <div class="project-alert-banner">
+                            <strong>3 critical alerts</strong> • Budget overrun predicted
+                        </div>
+                    </div>
+                </oj-action-card>
+
+                <!-- Project 2 - Warning -->
+                <oj-action-card>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <div>
+                                <div class="project-title">Mobile App v2.0</div>
+                                <oj-badge edge="start" size="sm">Active</oj-badge>
+                            </div>
+                            <div class="health-badge yellow">72</div>
+                        </div>
+
+                        <div>
+                            <oj-progress-bar value="45"></oj-progress-bar>
+                            <div style="font-size: 0.75rem; margin-top: 4px; color: var(--oj-palette-neutral-100);">
+                                Progress: 45%
+                            </div>
+                        </div>
+
+                        <div class="project-stats">
+                            <div>
+                                <div class="stat-label">Budget</div>
+                                <div class="stat-value">$52K / $75K</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Due Date</div>
+                                <div class="stat-value">Jan 30, 2026</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Tasks</div>
+                                <div class="stat-value">12 / 28</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Team</div>
+                                <div class="stat-value">8 members</div>
+                            </div>
+                        </div>
+
+                        <div class="project-alert-banner warning">
+                            <strong>2 warnings</strong> • 1 task at risk
+                        </div>
+                    </div>
+                </oj-action-card>
+
+                <!-- Project 3 - Healthy -->
+                <oj-action-card>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <div>
+                                <div class="project-title">Q4 Marketing Campaign</div>
+                                <oj-badge edge="start" size="sm">Active</oj-badge>
+                            </div>
+                            <div class="health-badge green">89</div>
+                        </div>
+
+                        <div>
+                            <oj-progress-bar value="67"></oj-progress-bar>
+                            <div style="font-size: 0.75rem; margin-top: 4px; color: var(--oj-palette-neutral-100);">
+                                Progress: 67%
+                            </div>
+                        </div>
+
+                        <div class="project-stats">
+                            <div>
+                                <div class="stat-label">Budget</div>
+                                <div class="stat-value">$28K / $35K</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Due Date</div>
+                                <div class="stat-value">Dec 31, 2025</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Tasks</div>
+                                <div class="stat-value">14 / 18</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Team</div>
+                                <div class="stat-value">4 members</div>
+                            </div>
+                        </div>
+                    </div>
+                </oj-action-card>
+
+                <!-- Project 4 - Healthy -->
+                <oj-action-card>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <div>
+                                <div class="project-title">Cloud Migration</div>
+                                <oj-badge edge="start" size="sm">Active</oj-badge>
+                            </div>
+                            <div class="health-badge green">84</div>
+                        </div>
+
+                        <div>
+                            <oj-progress-bar value="82"></oj-progress-bar>
+                            <div style="font-size: 0.75rem; margin-top: 4px; color: var(--oj-palette-neutral-100);">
+                                Progress: 82%
+                            </div>
+                        </div>
+
+                        <div class="project-stats">
+                            <div>
+                                <div class="stat-label">Budget</div>
+                                <div class="stat-value">$118K / $150K</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Due Date</div>
+                                <div class="stat-value">Nov 28, 2025</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Tasks</div>
+                                <div class="stat-value">32 / 36</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Team</div>
+                                <div class="stat-value">10 members</div>
+                            </div>
+                        </div>
+
+                        <div class="project-alert-banner warning">
+                            <strong>1 warning</strong> • Effort overrun on 1 task
+                        </div>
+                    </div>
+                </oj-action-card>
+
+                <!-- Project 5 - Warning -->
+                <oj-action-card>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <div>
+                                <div class="project-title">E-commerce Platform</div>
+                                <oj-badge edge="start" size="sm">Active</oj-badge>
+                            </div>
+                            <div class="health-badge yellow">68</div>
+                        </div>
+
+                        <div>
+                            <oj-progress-bar value="56"></oj-progress-bar>
+                            <div style="font-size: 0.75rem; margin-top: 4px; color: var(--oj-palette-neutral-100);">
+                                Progress: 56%
+                            </div>
+                        </div>
+
+                        <div class="project-stats">
+                            <div>
+                                <div class="stat-label">Budget</div>
+                                <div class="stat-value">$92K / $120K</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Due Date</div>
+                                <div class="stat-value">Feb 14, 2026</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Tasks</div>
+                                <div class="stat-value">22 / 42</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Team</div>
+                                <div class="stat-value">7 members</div>
+                            </div>
+                        </div>
+
+                        <div class="project-alert-banner warning">
+                            <strong>1 warning</strong> • Task not started
+                        </div>
+                    </div>
+                </oj-action-card>
+
+                <!-- Project 6 - Healthy -->
+                <oj-action-card>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <div>
+                                <div class="project-title">Design System</div>
+                                <oj-badge edge="start" size="sm">Active</oj-badge>
+                            </div>
+                            <div class="health-badge green">91</div>
+                        </div>
+
+                        <div>
+                            <oj-progress-bar value="78"></oj-progress-bar>
+                            <div style="font-size: 0.75rem; margin-top: 4px; color: var(--oj-palette-neutral-100);">
+                                Progress: 78%
+                            </div>
+                        </div>
+
+                        <div class="project-stats">
+                            <div>
+                                <div class="stat-label">Budget</div>
+                                <div class="stat-value">$38K / $45K</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Due Date</div>
+                                <div class="stat-value">Dec 10, 2025</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Tasks</div>
+                                <div class="stat-value">16 / 20</div>
+                            </div>
+                            <div>
+                                <div class="stat-label">Team</div>
+                                <div class="stat-value">5 members</div>
+                            </div>
+                        </div>
+                    </div>
+                </oj-action-card>
+            </div>
+        </div>
+    </div>
+
+    <!-- Oracle JET JavaScript from CDN -->
+    <script src="https://static.oracle.com/cdn/jet/18.0.0/3rdparty/require/require.js"></script>
+    <script>
+        requirejs.config({
+            paths: {
+                'ojs': 'https://static.oracle.com/cdn/jet/18.0.0/default/js/libs/oj/min',
+                'ojL10n': 'https://static.oracle.com/cdn/jet/18.0.0/default/js/libs/oj/ojL10n',
+                'ojtranslations': 'https://static.oracle.com/cdn/jet/18.0.0/default/js/libs/oj/resources',
+                'knockout': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/knockout/knockout-3.5.1',
+                'jquery': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/jquery/jquery-3.6.4.min',
+                'jqueryui-amd': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/jquery/jqueryui-amd-1.13.2.min',
+                'text': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/require/text',
+                'hammerjs': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/hammer/hammer-2.0.8.min',
+                'ojdnd': 'https://static.oracle.com/cdn/jet/18.0.0/default/js/libs/dnd-polyfill/dnd-polyfill-1.0.2.min',
+                'signals': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/js-signals/signals.min',
+                'customElements': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/webcomponents/custom-elements.min',
+                'css': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/require-css/css.min'
+            }
+        });
+
+        require(['ojs/ojcore', 'knockout', 'ojs/ojknockout', 'ojs/ojbutton', 'ojs/ojactioncard',
+                 'ojs/ojprogress-bar', 'ojs/ojbadge', 'ojs/ojavatar', 'ojs/ojstatusindicator'],
+        function(oj, ko) {
+            console.log('Oracle JET Redwood Dashboard initialized');
+
+            // Initialize button set
+            const alertFilter = document.getElementById('alertFilter');
+            if (alertFilter) {
+                alertFilter.value = 'all';
+            }
+        });
+    </script>
+</body>
+</html>

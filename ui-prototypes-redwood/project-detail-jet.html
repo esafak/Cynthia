@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Redesign - Project Details (Oracle JET Redwood)</title>
+
+    <!-- Oracle JET Redwood CSS from CDN -->
+    <link rel="stylesheet" href="https://static.oracle.com/cdn/jet/18.0.0/default/css/redwood/oj-redwood-min.css" type="text/css"/>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Oracle Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        /* Header */
+        .app-header {
+            padding: var(--oj-core-spacing-4x);
+            border-bottom: 1px solid var(--oj-palette-neutral-40);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--oj-palette-neutral-0);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--oj-core-spacing-3x);
+        }
+
+        .breadcrumb {
+            font-size: 0.875rem;
+            color: var(--oj-palette-neutral-100);
+        }
+
+        .breadcrumb a {
+            color: var(--oj-palette-brand-100);
+            text-decoration: none;
+        }
+
+        /* Container */
+        .container {
+            padding: var(--oj-core-spacing-6x);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: var(--oj-core-spacing-6x);
+        }
+
+        /* Project Header */
+        .project-header-card {
+            padding: var(--oj-core-spacing-6x);
+        }
+
+        .project-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--oj-core-spacing-4x);
+        }
+
+        .project-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: var(--oj-core-spacing-2x);
+        }
+
+        .project-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--oj-core-spacing-3x);
+            color: var(--oj-palette-neutral-100);
+            font-size: 0.875rem;
+        }
+
+        .health-dashboard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--oj-core-spacing-2x);
+        }
+
+        .health-circle-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--oj-palette-danger-80);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .health-subtitle {
+            font-size: 0.6875rem;
+            margin-top: -4px;
+        }
+
+        .health-label {
+            font-size: 0.8125rem;
+            font-weight: 600;
+        }
+
+        /* Alerts Panel */
+        .alerts-panel {
+            background-color: var(--oj-palette-danger-10);
+            border-left: 4px solid var(--oj-palette-danger-80);
+            border-radius: 4px;
+            padding: var(--oj-core-spacing-3x);
+            margin-bottom: var(--oj-core-spacing-4x);
+        }
+
+        .alerts-title {
+            font-weight: 600;
+            color: var(--oj-palette-danger-80);
+            margin-bottom: var(--oj-core-spacing-2x);
+        }
+
+        .alert-item {
+            background-color: white;
+            padding: var(--oj-core-spacing-3x);
+            border-radius: 4px;
+            margin-bottom: var(--oj-core-spacing-2x);
+        }
+
+        .alert-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .alert-item-title {
+            font-weight: 600;
+            margin-bottom: var(--oj-core-spacing-1x);
+        }
+
+        .alert-item-description {
+            font-size: 0.8125rem;
+            color: var(--oj-palette-neutral-130);
+        }
+
+        /* Team section */
+        .team-section {
+            display: flex;
+            align-items: center;
+            gap: var(--oj-core-spacing-3x);
+        }
+
+        .avatar-group {
+            display: flex;
+            margin-left: -8px;
+        }
+
+        .avatar-group oj-avatar {
+            margin-left: -8px;
+            border: 2px solid white;
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--oj-core-spacing-4x);
+        }
+
+        .metric-box {
+            padding: var(--oj-core-spacing-4x);
+        }
+
+        .metric-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--oj-core-spacing-2x);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--oj-palette-neutral-100);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--oj-core-spacing-1x);
+        }
+
+        .metric-detail {
+            font-size: 0.8125rem;
+            color: var(--oj-palette-neutral-100);
+        }
+
+        .metric-status {
+            font-size: 0.75rem;
+            margin-top: var(--oj-core-spacing-1x);
+        }
+
+        .metric-status.critical {
+            color: var(--oj-palette-danger-80);
+        }
+
+        .metric-status.warning {
+            color: var(--oj-palette-warning-80);
+        }
+
+        /* Tab content */
+        .tab-content {
+            padding: var(--oj-core-spacing-4x);
+        }
+
+        /* Task table custom styling */
+        .task-title-cell {
+            display: flex;
+            align-items: center;
+            gap: var(--oj-core-spacing-2x);
+        }
+
+        .priority-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .priority-high {
+            background-color: var(--oj-palette-danger-80);
+        }
+
+        .priority-medium {
+            background-color: var(--oj-palette-warning-80);
+        }
+
+        .priority-low {
+            background-color: var(--oj-palette-neutral-60);
+        }
+
+        .progress-cell {
+            display: flex;
+            align-items: center;
+            gap: var(--oj-core-spacing-2x);
+        }
+
+        .progress-text {
+            min-width: 40px;
+            font-weight: 600;
+        }
+
+        /* Insights panel */
+        .insights-content {
+            padding: var(--oj-core-spacing-4x);
+        }
+
+        .chart-container {
+            margin-bottom: var(--oj-core-spacing-4x);
+        }
+
+        .chart-label {
+            font-weight: 600;
+            margin-bottom: var(--oj-core-spacing-2x);
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--oj-palette-neutral-100);
+        }
+
+        .insight-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--oj-core-spacing-3x);
+        }
+
+        .insight-card {
+            padding: var(--oj-core-spacing-3x);
+            background-color: var(--oj-palette-neutral-20);
+            border-radius: 6px;
+        }
+
+        .insight-card-title {
+            font-size: 0.75rem;
+            color: var(--oj-palette-neutral-100);
+            margin-bottom: var(--oj-core-spacing-1x);
+        }
+
+        .insight-card-value {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="app-header">
+        <div class="header-left">
+            <oj-button chroming="borderless" onclick="window.location.href='dashboard-jet.html'">
+                <span slot="startIcon" class="oj-ux-ico-arrow-left"></span>
+            </oj-button>
+            <div class="breadcrumb">
+                <a href="dashboard-jet.html">Dashboard</a> / <span>Website Redesign</span>
+            </div>
+        </div>
+        <div>
+            <oj-button chroming="outlined">
+                <span slot="startIcon" class="oj-ux-ico-more-vertical"></span>
+                More
+            </oj-button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Project Header -->
+        <div class="section">
+            <oj-action-card>
+                <div class="project-header-card">
+                    <div class="project-title-row">
+                        <div>
+                            <h1 class="project-title">Website Redesign</h1>
+                            <div class="project-meta">
+                                <oj-badge size="sm">Active</oj-badge>
+                                <span>Oct 1, 2025 - Dec 15, 2025</span>
+                                <span>•</span>
+                                <span>PM: Sarah Johnson</span>
+                            </div>
+                        </div>
+                        <div class="health-dashboard">
+                            <div class="health-circle-large">
+                                42
+                                <div class="health-subtitle">Critical</div>
+                            </div>
+                            <div class="health-label">Health Score</div>
+                        </div>
+                    </div>
+
+                    <!-- Alerts -->
+                    <div class="alerts-panel">
+                        <div class="alerts-title">🚨 3 Critical Alerts</div>
+                        <div class="alert-item">
+                            <div class="alert-item-title">Budget Overrun Predicted</div>
+                            <div class="alert-item-description">
+                                Project is forecasted to exceed budget by 28% based on current burn rate ($1,850/day).
+                                Projected total: $128K vs $100K budget.
+                            </div>
+                        </div>
+                        <div class="alert-item">
+                            <div class="alert-item-title">Task At Risk: Backend API Development</div>
+                            <div class="alert-item-description">
+                                Due in 2 days but only 35% complete. 18 of 40 estimated hours used.
+                            </div>
+                        </div>
+                        <div class="alert-item">
+                            <div class="alert-item-title">High Burn Rate</div>
+                            <div class="alert-item-description">
+                                Current burn rate is 25% higher than planned. Consider resource reallocation.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Team -->
+                    <div class="team-section">
+                        <span style="font-weight: 600; font-size: 0.8125rem;">Team:</span>
+                        <div class="avatar-group">
+                            <oj-avatar size="xs" initials="SJ"></oj-avatar>
+                            <oj-avatar size="xs" initials="JD"></oj-avatar>
+                            <oj-avatar size="xs" initials="EC"></oj-avatar>
+                            <oj-avatar size="xs" initials="MW"></oj-avatar>
+                            <oj-avatar size="xs" initials="AL"></oj-avatar>
+                            <oj-avatar size="xs" initials="KR"></oj-avatar>
+                        </div>
+                        <span style="font-size: 0.8125rem; color: var(--oj-palette-neutral-100);">6 members</span>
+                    </div>
+                </div>
+            </oj-action-card>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="section">
+            <div class="metrics-grid">
+                <!-- Metric 1 - Tasks -->
+                <oj-action-card>
+                    <div class="metric-box">
+                        <div class="metric-header">
+                            <div class="metric-label">Tasks</div>
+                            <div class="metric-icon" style="background-color: var(--oj-palette-info-20); color: var(--oj-palette-info-80);">
+                                ✓
+                            </div>
+                        </div>
+                        <div class="metric-value">18 / 24</div>
+                        <div class="metric-detail">6 remaining</div>
+                        <div class="metric-status critical">• 3 at risk, 1 overdue</div>
+                    </div>
+                </oj-action-card>
+
+                <!-- Metric 2 - Budget -->
+                <oj-action-card>
+                    <div class="metric-box">
+                        <div class="metric-header">
+                            <div class="metric-label">Budget</div>
+                            <div class="metric-icon" style="background-color: var(--oj-palette-warning-20); color: var(--oj-palette-warning-80);">
+                                $
+                            </div>
+                        </div>
+                        <div class="metric-value">$88K / $100K</div>
+                        <div class="metric-detail">88% spent</div>
+                        <div class="metric-status critical">• Forecasted: $128K (+28%)</div>
+                    </div>
+                </oj-action-card>
+
+                <!-- Metric 3 - Timeline -->
+                <oj-action-card>
+                    <div class="metric-box">
+                        <div class="metric-header">
+                            <div class="metric-label">Timeline</div>
+                            <div class="metric-icon" style="background-color: var(--oj-palette-neutral-30); color: var(--oj-palette-neutral-100);">
+                                ⏱
+                            </div>
+                        </div>
+                        <div class="metric-value">43 / 75 days</div>
+                        <div class="metric-detail">32 days remaining</div>
+                        <div class="metric-status warning">• 57% elapsed</div>
+                    </div>
+                </oj-action-card>
+
+                <!-- Metric 4 - Team -->
+                <oj-action-card>
+                    <div class="metric-box">
+                        <div class="metric-header">
+                            <div class="metric-label">Team</div>
+                            <div class="metric-icon" style="background-color: var(--oj-palette-success-20); color: var(--oj-palette-success-80);">
+                                👥
+                            </div>
+                        </div>
+                        <div class="metric-value">6 members</div>
+                        <div class="metric-detail">Avg. 32 hrs/week</div>
+                    </div>
+                </oj-action-card>
+            </div>
+        </div>
+
+        <!-- Tabs Section -->
+        <div class="section">
+            <oj-tab-bar id="tabBar" edge="top">
+                <ul>
+                    <li><a href="#tasks">Tasks</a></li>
+                    <li><a href="#timeline">Timeline</a></li>
+                    <li><a href="#budget">Budget</a></li>
+                    <li><a href="#team">Team</a></li>
+                </ul>
+            </oj-tab-bar>
+
+            <oj-switcher value="[[selectedTab]]">
+                <!-- Tasks Tab -->
+                <div slot="tasks">
+                    <oj-action-card>
+                        <div class="tab-content">
+                            <oj-table id="tasksTable"
+                                      aria-label="Project Tasks Table"
+                                      data="[[taskDataProvider]]"
+                                      columns='[
+                                          {"headerText": "Task", "field": "task", "headerClassName": "oj-sm-only-hide", "className": "oj-sm-only-hide", "resizable": "enabled", "sortable": "disabled"},
+                                          {"headerText": "Assignee", "field": "assignee", "headerClassName": "oj-sm-only-hide", "className": "oj-sm-only-hide", "resizable": "enabled"},
+                                          {"headerText": "Status", "field": "status", "headerClassName": "oj-sm-only-hide", "className": "oj-sm-only-hide", "resizable": "enabled"},
+                                          {"headerText": "Due Date", "field": "dueDate", "headerClassName": "oj-sm-only-hide", "className": "oj-sm-only-hide", "resizable": "enabled"},
+                                          {"headerText": "Progress", "field": "progress", "headerClassName": "oj-sm-only-hide", "className": "oj-sm-only-hide", "resizable": "enabled"},
+                                          {"headerText": "Hours", "field": "hours", "headerClassName": "oj-sm-only-hide", "className": "oj-sm-only-hide", "resizable": "enabled"},
+                                          {"headerText": "Health", "field": "health", "headerClassName": "oj-sm-only-hide", "className": "oj-sm-only-hide", "resizable": "enabled"}
+                                      ]'>
+                            </oj-table>
+
+                            <!-- Simple task list for demo (since oj-table needs data binding) -->
+                            <div style="margin-top: var(--oj-core-spacing-4x);">
+                                <h3 style="margin-bottom: var(--oj-core-spacing-3x);">Task List</h3>
+
+                                <oj-list-view id="tasksList" aria-label="tasks list">
+                                    <!-- Task 1 -->
+                                    <oj-list-item-layout>
+                                        <div class="task-title-cell">
+                                            <span class="priority-indicator priority-high"></span>
+                                            <span>Homepage Redesign</span>
+                                        </div>
+                                        <span slot="secondary">Emma Chen • Nov 5, 2025</span>
+                                        <oj-badge slot="trailing" edge="start" size="sm">Done</oj-badge>
+                                        <div slot="tertiary" class="progress-cell">
+                                            <oj-progress-bar value="100" style="width: 100px;"></oj-progress-bar>
+                                            <span class="progress-text">100%</span>
+                                        </div>
+                                    </oj-list-item-layout>
+
+                                    <!-- Task 2 -->
+                                    <oj-list-item-layout>
+                                        <div class="task-title-cell">
+                                            <span class="priority-indicator priority-high"></span>
+                                            <span>Backend API Development</span>
+                                        </div>
+                                        <span slot="secondary">John Davis • Nov 15, 2025 • 18/40 hrs</span>
+                                        <oj-badge slot="trailing" edge="start" size="sm">In Progress</oj-badge>
+                                        <div slot="tertiary" class="progress-cell">
+                                            <oj-progress-bar value="35" style="width: 100px;"></oj-progress-bar>
+                                            <span class="progress-text">35%</span>
+                                            <oj-status-indicator-icon severity="error" size="sm"></oj-status-indicator-icon>
+                                        </div>
+                                    </oj-list-item-layout>
+
+                                    <!-- Task 3 -->
+                                    <oj-list-item-layout>
+                                        <div class="task-title-cell">
+                                            <span class="priority-indicator priority-medium"></span>
+                                            <span>User Authentication Flow</span>
+                                        </div>
+                                        <span slot="secondary">Mike Wilson • Nov 20, 2025 • 24/35 hrs</span>
+                                        <oj-badge slot="trailing" edge="start" size="sm">In Progress</oj-badge>
+                                        <div slot="tertiary" class="progress-cell">
+                                            <oj-progress-bar value="60" style="width: 100px;"></oj-progress-bar>
+                                            <span class="progress-text">60%</span>
+                                            <oj-status-indicator-icon severity="confirmation" size="sm"></oj-status-indicator-icon>
+                                        </div>
+                                    </oj-list-item-layout>
+
+                                    <!-- Task 4 -->
+                                    <oj-list-item-layout>
+                                        <div class="task-title-cell">
+                                            <span class="priority-indicator priority-high"></span>
+                                            <span>Product Gallery Component</span>
+                                        </div>
+                                        <span slot="secondary">Anna Lee • Nov 18, 2025 • 22/28 hrs</span>
+                                        <oj-badge slot="trailing" edge="start" size="sm">In Progress</oj-badge>
+                                        <div slot="tertiary" class="progress-cell">
+                                            <oj-progress-bar value="75" style="width: 100px;"></oj-progress-bar>
+                                            <span class="progress-text">75%</span>
+                                            <oj-status-indicator-icon severity="confirmation" size="sm"></oj-status-indicator-icon>
+                                        </div>
+                                    </oj-list-item-layout>
+
+                                    <!-- Task 5 -->
+                                    <oj-list-item-layout>
+                                        <div class="task-title-cell">
+                                            <span class="priority-indicator priority-medium"></span>
+                                            <span>Shopping Cart Integration</span>
+                                        </div>
+                                        <span slot="secondary">Kate Roberts • Nov 25, 2025 • 0/45 hrs</span>
+                                        <oj-badge slot="trailing" edge="start" size="sm">To Do</oj-badge>
+                                        <div slot="tertiary" class="progress-cell">
+                                            <oj-progress-bar value="0" style="width: 100px;"></oj-progress-bar>
+                                            <span class="progress-text">0%</span>
+                                        </div>
+                                    </oj-list-item-layout>
+                                </oj-list-view>
+                            </div>
+                        </div>
+                    </oj-action-card>
+                </div>
+
+                <!-- Timeline Tab -->
+                <div slot="timeline">
+                    <oj-action-card>
+                        <div class="tab-content">
+                            <div class="chart-placeholder">
+                                📊 Gantt Chart / Timeline View<br>
+                                <small>(Visual timeline of all tasks with dependencies)</small>
+                            </div>
+                        </div>
+                    </oj-action-card>
+                </div>
+
+                <!-- Budget Tab -->
+                <div slot="budget">
+                    <oj-action-card>
+                        <div class="tab-content" style="text-align: center;">
+                            <oj-button chroming="callToAction" onclick="window.location.href='budget-detail-jet.html'">
+                                View Detailed Budget Analysis
+                            </oj-button>
+                        </div>
+                    </oj-action-card>
+                </div>
+
+                <!-- Team Tab -->
+                <div slot="team">
+                    <oj-action-card>
+                        <div class="tab-content">
+                            <div class="chart-placeholder">
+                                👥 Team Members & Workload Distribution<br>
+                                <small>(Team member cards with task assignments and capacity)</small>
+                            </div>
+                        </div>
+                    </oj-action-card>
+                </div>
+            </oj-switcher>
+        </div>
+
+        <!-- Insights Panel -->
+        <div class="section">
+            <oj-action-card>
+                <div class="insights-content">
+                    <h3 style="margin-bottom: var(--oj-core-spacing-4x);">Project Insights & Forecasting</h3>
+
+                    <div class="chart-container">
+                        <div class="chart-label">Budget Burn Rate Trend</div>
+                        <div class="chart-placeholder">
+                            📈 Line Chart: Daily/Weekly Burn Rate<br>
+                            <small>(Shows spending trend and projected completion cost)</small>
+                        </div>
+                    </div>
+
+                    <div class="insight-cards">
+                        <div class="insight-card">
+                            <div class="insight-card-title">Current Burn Rate</div>
+                            <div class="insight-card-value" style="color: var(--oj-palette-danger-80);">$1,850/day</div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-card-title">Days of Budget Remaining</div>
+                            <div class="insight-card-value" style="color: var(--oj-palette-warning-80);">6.5 days</div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-card-title">Completion Velocity</div>
+                            <div class="insight-card-value" style="color: var(--oj-palette-info-80);">1.2% per day</div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-card-title">Projected Finish Date</div>
+                            <div class="insight-card-value">Dec 22, 2025</div>
+                        </div>
+                    </div>
+                </div>
+            </oj-action-card>
+        </div>
+    </div>
+
+    <!-- Oracle JET JavaScript from CDN -->
+    <script src="https://static.oracle.com/cdn/jet/18.0.0/3rdparty/require/require.js"></script>
+    <script>
+        requirejs.config({
+            paths: {
+                'ojs': 'https://static.oracle.com/cdn/jet/18.0.0/default/js/libs/oj/min',
+                'ojL10n': 'https://static.oracle.com/cdn/jet/18.0.0/default/js/libs/oj/ojL10n',
+                'ojtranslations': 'https://static.oracle.com/cdn/jet/18.0.0/default/js/libs/oj/resources',
+                'knockout': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/knockout/knockout-3.5.1',
+                'jquery': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/jquery/jquery-3.6.4.min',
+                'jqueryui-amd': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/jquery/jqueryui-amd-1.13.2.min',
+                'text': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/require/text',
+                'hammerjs': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/hammer/hammer-2.0.8.min',
+                'ojdnd': 'https://static.oracle.com/cdn/jet/18.0.0/default/js/libs/dnd-polyfill/dnd-polyfill-1.0.2.min',
+                'signals': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/js-signals/signals.min',
+                'customElements': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/webcomponents/custom-elements.min',
+                'css': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/require-css/css.min'
+            }
+        });
+
+        require(['ojs/ojcore', 'knockout', 'ojs/ojknockout', 'ojs/ojbutton', 'ojs/ojactioncard',
+                 'ojs/ojprogress-bar', 'ojs/ojbadge', 'ojs/ojavatar', 'ojs/ojstatusindicator',
+                 'ojs/ojtabbar', 'ojs/ojswitcher', 'ojs/ojlistview', 'ojs/ojlistitemlayout', 'ojs/ojtable'],
+        function(oj, ko) {
+            console.log('Oracle JET Redwood Project Detail initialized');
+
+            // Simple tab switching
+            const tabBar = document.getElementById('tabBar');
+            let selectedTab = ko.observable('tasks');
+
+            if (tabBar) {
+                tabBar.addEventListener('ojBeforeSelect', function(event) {
+                    selectedTab(event.detail.key);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
