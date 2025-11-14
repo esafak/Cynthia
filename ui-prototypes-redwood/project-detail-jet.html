@@ -651,25 +651,24 @@
     <script src="https://static.oracle.com/cdn/jet/18.0.0/3rdparty/require/require.js"></script>
     <script>
         requirejs.config({
+            baseUrl: 'https://static.oracle.com/cdn/jet/18.0.0/default/js',
             paths: {
-                'ojs': 'https://static.oracle.com/cdn/jet/18.0.0/default/js/libs/oj/min',
-                'ojL10n': 'https://static.oracle.com/cdn/jet/18.0.0/default/js/libs/oj/ojL10n',
-                'ojtranslations': 'https://static.oracle.com/cdn/jet/18.0.0/default/js/libs/oj/resources',
                 'knockout': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/knockout/knockout-3.5.1',
                 'jquery': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/jquery/jquery-3.6.4.min',
                 'jqueryui-amd': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/jquery/jqueryui-amd-1.13.2.min',
                 'text': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/require/text',
                 'hammerjs': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/hammer/hammer-2.0.8.min',
-                'ojdnd': 'https://static.oracle.com/cdn/jet/18.0.0/default/js/libs/dnd-polyfill/dnd-polyfill-1.0.2.min',
                 'signals': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/js-signals/signals.min',
                 'customElements': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/webcomponents/custom-elements.min',
-                'css': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/require-css/css.min'
+                'css': 'https://static.oracle.com/cdn/jet/18.0.0/3rdparty/require-css/css.min',
+                'ojdnd': 'https://static.oracle.com/cdn/jet/18.0.0/default/js/libs/dnd-polyfill/dnd-polyfill-1.0.2.min'
             }
         });
 
-        require(['ojs/ojcore', 'knockout', 'ojs/ojknockout', 'ojs/ojbutton', 'ojs/ojactioncard',
-                 'ojs/ojprogress-bar', 'ojs/ojbadge', 'ojs/ojavatar', 'ojs/ojstatusindicator',
-                 'ojs/ojtabbar', 'ojs/ojswitcher', 'ojs/ojlistview', 'ojs/ojlistitemlayout', 'ojs/ojtable'],
+        require(['libs/oj/min/ojcore', 'knockout', 'libs/oj/min/ojknockout', 'libs/oj/min/ojbutton',
+                 'libs/oj/min/ojactioncard', 'libs/oj/min/ojprogress-bar', 'libs/oj/min/ojbadge',
+                 'libs/oj/min/ojavatar', 'libs/oj/min/ojstatusindicator', 'libs/oj/min/ojtabbar',
+                 'libs/oj/min/ojswitcher', 'libs/oj/min/ojlistview', 'libs/oj/min/ojlistitemlayout', 'libs/oj/min/ojtable'],
         function(oj, ko) {
             console.log('Oracle JET Redwood Project Detail initialized');
 
